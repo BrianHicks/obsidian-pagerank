@@ -9,7 +9,13 @@
       let pkgs = import inputs.nixpkgs { inherit system; };
       in {
         devShell = pkgs.mkShell {
-          packages = [ pkgs.rustc pkgs.cargo pkgs.libiconv pkgs.rustfmt ];
+          packages = [
+            pkgs.rustc
+            pkgs.cargo
+            pkgs.libiconv
+            pkgs.rustfmt
+            pkgs.rust-analyzer
+          ];
         };
       });
 }
