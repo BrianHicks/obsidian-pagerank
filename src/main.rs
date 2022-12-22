@@ -3,6 +3,7 @@ use color_eyre::Result;
 use eyre::WrapErr;
 use rayon::prelude::*;
 use regex::Regex;
+use simple_pagerank::Pagerank;
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 
@@ -28,7 +29,13 @@ impl Opts {
             .discover_links(&files)
             .context("could not discover links")?;
 
-        println!("{links:?}");
+        let pagerank = self
+            .calculate_pagerank(&links)
+            .wrap_err("could not calculate pagerank")?;
+
+        for (node, score) in pagerank.nodes() {
+            println!("{score:.3}\t{node}");
+        }
 
         Ok(())
     }
@@ -100,6 +107,27 @@ impl Opts {
         }
 
         return Ok(out);
+    }
+
+    fn calculate_pagerank<'links>(
+        &self,
+        links: &'links HashMap<String, HashSet<String>>,
+    ) -> Result<Pagerank<&'links String>> {
+        let mut pagerank = Pagerank::new();
+        pagerank
+            .set_damping_factor(self.damping_factor)
+            .map_err(|e| eyre::eyre!(e))
+            .wrap_err("could not set damping factor")?;
+
+        for (name, out_edges) in links {
+            for link in out_edges {
+                pagerank.add_edge(name, link)
+            }
+        }
+
+        pagerank.calculate();
+
+        Ok(pagerank)
     }
 }
 
