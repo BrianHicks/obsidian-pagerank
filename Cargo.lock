@@ -382,7 +382,9 @@ dependencies = [
  "color-eyre",
  "eyre",
  "ignore",
+ "lazy_static",
  "rayon",
+ "regex",
  "simple-pagerank",
 ]
 
