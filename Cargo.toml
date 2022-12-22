@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.0.30", features = ["cargo", "derive", "env"] }
 color-eyre = "0.6.2"
+eyre = "0.6.8"
 ignore = "0.4.18"
 rayon = "1.6.1"
 simple-pagerank = "0.2.0"
