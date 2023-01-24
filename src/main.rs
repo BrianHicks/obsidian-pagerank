@@ -33,9 +33,15 @@ impl Opts {
             .calculate_pagerank(&links)
             .wrap_err("could not calculate pagerank")?;
 
-        for (node, score) in pagerank.nodes() {
-            println!("{score:.3}\t{node}");
-        }
+        println!(
+            "{}",
+            pagerank
+                .nodes()
+                .iter()
+                .map(|(node, score)| format!("{score:.3}\t{node}"))
+                .collect::<Vec<String>>()
+                .join("\n")
+        );
 
         Ok(())
     }
